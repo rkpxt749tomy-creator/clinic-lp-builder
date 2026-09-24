@@ -199,6 +199,16 @@
       </div>
     </details>
 
+    <!-- 9. 症状別ページ -->
+    <details>
+      <summary>🩹 症状別ページ</summary>
+      <div class="section-body">
+        <p class="hint">「ぎっくり腰」「肩こり」など症状ごとに専用ページを作れます。上のツールバーの表示切替から確認・書き出しができます。キャンペーンと他院との違いは全ページ共通です。</p>
+        <div id="symptomPagesList"></div>
+        <button class="add-btn" data-action="add-symptom-page">＋ 症状別ページを追加</button>
+      </div>
+    </details>
+
     <!-- 8. フッター -->
     <details>
       <summary>📍 アクセス・フッター</summary>
@@ -214,6 +224,7 @@
   <div class="preview-wrap">
     <div class="toolbar">
       <h1>整体院LPビルダー</h1>
+      <select id="pageSelector" style="padding:6px 8px;border-radius:5px;border:none;font-size:12px;"></select>
       <button id="downloadBtn">⬇ HTMLをダウンロード</button>
       <button id="exportJsonBtn" class="secondary">設定を保存(JSON)</button>
       <label class="btn secondary" for="jsonFileInput">設定を読込(JSON)</label>
@@ -307,7 +318,39 @@ const defaultState = {
       {label:"3ヶ月目", value:"3"},
       {label:"卒業後", value:"0"}
     ]
-  }
+  },
+  symptomPages:[
+    {
+      symptomName:"ぎっくり腰",
+      worries:[
+        "まず今の腰の痛みをなんとかしたい",
+        "痛みが強く歩くのもままならない",
+        "毎年何度かぎっくり腰になってしまう",
+        "薬や湿布に頼りたくない",
+        "注射をせずにこの痛みをよくしたい"
+      ],
+      worriesCTA:"1つでも当てはまる方は、できるだけ早く当院にご相談ください！",
+      beforeAfterHeadline:"歩くのもままならないぎっくり腰が、2倍のスピードで歩けるように",
+      symptomTestimonials:[
+        {title:"歩くのもままならない状態から、帰りは2倍のスピードで歩けるように", body:"Q. 施術を受ける前はどんな症状でお困りでしたか？\nいきなりのぎっくり腰でまったく動けなくなってしまった。\n\nQ. 実際に施術を受けてみてよかったところは？\n歩くのもままならない状態だったのが、帰る時は2倍のスピードで歩けるほど痛みが引いていた。"},
+        {title:"4回の施術でぎっくり腰が完治", body:"ぎっくり腰になり、あわてて来院しました。1回の施術でだいぶ楽になり、4回の施術で完治しました。腰痛体操も教えてもらい大変助かりました。"}
+      ],
+      missionCatch:"「帰りはスタスタと歩いて帰る」が当院のぎっくり腰施術のミッション",
+      missionIntro:"なぜ当院にぎっくり腰で来られた方は、帰りにはスタスタと歩くことができるのか？\nここではぎっくり腰の特徴や、当院が考える原因とその対処法をご紹介します。",
+      causesTitle:"一般的なぎっくり腰の原因と対処法",
+      causesBody:"ぎっくり腰になってしまう原因として一般的には、筋肉の疲労・関節のズレ・長時間の無理な姿勢などが挙げられます。\n\n対処法としては、まず冷静になること。急激な痛みで判断が難しくなりますが、場合によっては重大な疾患が隠れていることもあるため、落ち着いて状態を把握することが第一です。\n\n痛みが強く動けない場合はまず安静に。湿布やアイシング、痛み止めの使用も一般的な対処法として有効とされています。",
+      whyUsTitle:"当院だと「帰りはスタスタ」歩けるようになる理由",
+      whyUsBody:"当院ではぎっくり腰の原因を「疲労によりカラダのコンディションが著しく低下してしまっていること」と考えています。\n\n疲労を起こす要因は、睡眠不足・不摂生・ストレス・運動不足など。特に暴飲暴食が重なる季節や、温度変化が大きい季節の変わり目は要注意です。\n\n動くのもままならないような症状の場合は、まず患部への施術を重点的に行い、動きをラクにします。そのうえで、原因である疲労を根本から施術していきます。",
+      treatmentPoints:["骨盤周りの関節の調整","腰回りの筋肉の調整","腰に関連する下半身の筋肉への調整"],
+      faqList:[
+        {q:"健康保険は使えますか？", a:"申し訳ございません。当院では施術技術のレベルを高く保つため、すべて自費の施術とさせていただいています。"},
+        {q:"施術は痛いですか？怖くないですか？", a:"ご安心ください。当院の施術はソフトで痛みを感じることはありませんので、リラックスした状態で受けていただけます。"},
+        {q:"何回くらいで良くなりますか？", a:"症状の程度によりますが、目安として3ヶ月で通院を卒業いただけるような通院計画をご提案しております。"}
+      ],
+      closingStory:"ぎっくり腰になってしまったときは、本当に我を忘れて「どうしよう…」と混乱してしまいます。\n一度その痛みを経験すると、あの痛みがいつ再びやってくるのかと不安を抱えながら生活しなくてはならない…。\n\nしかし、ぎっくり腰は決して怖いものではありません。原因がハッキリしていて、よくなるものだからです。\n\nあなたはぎっくり腰による不安がなくなったら、何がしたいですか？\n当院はあなたの「よくなったらしたいこと」のために全力でサポートします。",
+      relatedArticles:["腰痛の原因は腰にない理由とあなたがすべきシンプルな行動","体を捻ると腰が痛い その原因は？","ぎっくり腰の正しい対処法　温める？冷やす？"]
+    }
+  ]
 };
 
 let state = loadState();
@@ -500,6 +543,86 @@ function renderRecommendationsList(){
   });
 }
 
+// ---------- generic 2-field object list (used by symptom pages) ----------
+function renderObjectListGeneric(containerId, path, fields){
+  const container = document.getElementById(containerId);
+  const arr = getPath(state, path);
+  container.innerHTML = "";
+  arr.forEach((item, i)=>{
+    const div = document.createElement("div");
+    div.className = "list-item";
+    const fieldsHtml = fields.map(f=>{
+      if(f.type === "textarea"){
+        return `<div class="field"><label>${f.label}</label><textarea data-obj-path="${path}" data-index="${i}" data-key="${f.key}">${item[f.key]||""}</textarea></div>`;
+      }
+      return `<div class="field"><label>${f.label}</label><input type="text" value="${escapeAttr(item[f.key]||"")}" data-obj-path="${path}" data-index="${i}" data-key="${f.key}"></div>`;
+    }).join("");
+    div.innerHTML = `<button class="del" data-action="remove-object" data-path="${path}" data-index="${i}">削除</button>${fieldsHtml}`;
+    container.appendChild(div);
+  });
+}
+
+// ---------- symptom pages (症状別ページ) ----------
+function renderSymptomPagesList(){
+  const container = document.getElementById("symptomPagesList");
+  container.innerHTML = state.symptomPages.map((p,i)=>{
+    const base = `symptomPages.${i}`;
+    return `
+    <div class="list-item">
+      <button class="del" data-action="remove-symptom-page" data-index="${i}">削除</button>
+      <div class="field"><label>症状名（ページタイトル）</label><input type="text" value="${escapeAttr(p.symptomName)}" data-obj-path="symptomPages" data-index="${i}" data-key="symptomName"></div>
+
+      <p class="hint">😣 お悩みリスト</p>
+      <div id="symWorries-${i}"></div>
+      <button class="add-btn" data-action="add-simple" data-path="${base}.worries">＋ お悩みを追加</button>
+      <div class="field"><label>お悩みCTA文</label><input type="text" value="${escapeAttr(p.worriesCTA)}" data-obj-path="symptomPages" data-index="${i}" data-key="worriesCTA"></div>
+
+      <div class="field"><label>ビフォーアフター見出し</label><input type="text" value="${escapeAttr(p.beforeAfterHeadline)}" data-obj-path="symptomPages" data-index="${i}" data-key="beforeAfterHeadline"></div>
+
+      <p class="hint">💬 症状別のお客様の声</p>
+      <div id="symTesti-${i}"></div>
+      <button class="add-btn" data-action="add-object" data-path="${base}.symptomTestimonials">＋ 声を追加</button>
+
+      <div class="field"><label>ミッション見出し</label><input type="text" value="${escapeAttr(p.missionCatch)}" data-obj-path="symptomPages" data-index="${i}" data-key="missionCatch"></div>
+      <div class="field"><label>ミッション導入文</label><textarea data-obj-path="symptomPages" data-index="${i}" data-key="missionIntro">${p.missionIntro}</textarea></div>
+
+      <div class="field"><label>一般的な原因の見出し</label><input type="text" value="${escapeAttr(p.causesTitle)}" data-obj-path="symptomPages" data-index="${i}" data-key="causesTitle"></div>
+      <div class="field"><label>一般的な原因と対処法（本文）</label><textarea data-obj-path="symptomPages" data-index="${i}" data-key="causesBody" style="min-height:100px;">${p.causesBody}</textarea></div>
+
+      <div class="field"><label>当院の強み 見出し</label><input type="text" value="${escapeAttr(p.whyUsTitle)}" data-obj-path="symptomPages" data-index="${i}" data-key="whyUsTitle"></div>
+      <div class="field"><label>当院の強み（本文）</label><textarea data-obj-path="symptomPages" data-index="${i}" data-key="whyUsBody" style="min-height:100px;">${p.whyUsBody}</textarea></div>
+
+      <p class="hint">施術内容ポイント</p>
+      <div id="symTreat-${i}"></div>
+      <button class="add-btn" data-action="add-simple" data-path="${base}.treatmentPoints">＋ ポイントを追加</button>
+
+      <p class="hint">❓ よくある質問</p>
+      <div id="symFaq-${i}"></div>
+      <button class="add-btn" data-action="add-object" data-path="${base}.faqList">＋ Q&amp;Aを追加</button>
+
+      <div class="field"><label>締めの物語（改行可）</label><textarea data-obj-path="symptomPages" data-index="${i}" data-key="closingStory" style="min-height:90px;">${p.closingStory}</textarea></div>
+
+      <p class="hint">関連記事タイトル</p>
+      <div id="symRelated-${i}"></div>
+      <button class="add-btn" data-action="add-simple" data-path="${base}.relatedArticles">＋ 記事を追加</button>
+    </div>`;
+  }).join("");
+
+  state.symptomPages.forEach((p,i)=>{
+    renderSimpleList(`symWorries-${i}`, `symptomPages.${i}.worries`);
+    renderObjectListGeneric(`symTesti-${i}`, `symptomPages.${i}.symptomTestimonials`, [
+      {key:"title", label:"タイトル", type:"input"},
+      {key:"body", label:"本文（Q&amp;A形式・改行可）", type:"textarea"}
+    ]);
+    renderSimpleList(`symTreat-${i}`, `symptomPages.${i}.treatmentPoints`);
+    renderObjectListGeneric(`symFaq-${i}`, `symptomPages.${i}.faqList`, [
+      {key:"q", label:"質問", type:"input"},
+      {key:"a", label:"回答", type:"textarea"}
+    ]);
+    renderSimpleList(`symRelated-${i}`, `symptomPages.${i}.relatedArticles`);
+  });
+}
+
 // ---------- add/remove actions ----------
 editor.addEventListener("click", (e)=>{
   const action = e.target.dataset.action;
@@ -514,7 +637,36 @@ editor.addEventListener("click", (e)=>{
   } else if(action === "add-object"){
     if(path === "features") state.features.push({title:"新しい理由", body:"説明を入力してください。"});
     if(path === "testimonials") state.testimonials.push({name:"お客様", comment:"コメントを入力してください。"});
+    if(path.endsWith(".symptomTestimonials")) getPath(state,path).push({title:"新しいお客様の声", body:"Q. \nA. "});
+    if(path.endsWith(".faqList")) getPath(state,path).push({q:"質問を入力してください", a:"回答を入力してください"});
     rerenderListSection(path);
+  } else if(action === "add-symptom-page"){
+    state.symptomPages.push({
+      symptomName:"新しい症状ページ",
+      worries:["お悩みを入力してください"],
+      worriesCTA:"1つでも当てはまる方は、できるだけ早く当院にご相談ください！",
+      beforeAfterHeadline:"",
+      symptomTestimonials:[],
+      missionCatch:"",
+      missionIntro:"",
+      causesTitle:"一般的な原因と対処法",
+      causesBody:"",
+      whyUsTitle:"当院だと良くなる理由",
+      whyUsBody:"",
+      treatmentPoints:[],
+      faqList:[],
+      closingStory:"",
+      relatedArticles:[]
+    });
+    renderSymptomPagesList();
+    renderPageSelector();
+  } else if(action === "remove-symptom-page"){
+    const idx = Number(e.target.dataset.index);
+    state.symptomPages.splice(idx, 1);
+    if(currentPreviewIndex === idx) currentPreviewIndex = -1;
+    else if(currentPreviewIndex > idx) currentPreviewIndex -= 1;
+    renderSymptomPagesList();
+    renderPageSelector();
   } else if(action === "remove-object"){
     getPath(state, path).splice(Number(e.target.dataset.index), 1);
     rerenderListSection(path);
@@ -547,6 +699,7 @@ function rerenderListSection(path){
   if(path === "program.chartData") renderProgramChartList();
   if(path === "conditions") renderConditionsList();
   if(path === "recommendations") renderRecommendationsList();
+  if(path.startsWith("symptomPages.")) renderSymptomPagesList();
 }
 
 // ---------- image upload ----------
@@ -570,21 +723,16 @@ function esc(s){
 }
 function nl2br(s){ return esc(s).replace(/\n/g,"<br>"); }
 
-function generateSiteHTML(s){
-  const t = s.theme;
-  const reserveBtns = `
+function reserveBtnsHTML(s){
+  return `
     <a class="cta-btn cta-primary" href="tel:${esc(s.phone.replace(/[^0-9]/g,""))}">📞 今すぐ電話する<br><span class="cta-sub">${esc(s.phone)}</span></a>
     ${s.webReserveUrl ? `<a class="cta-btn cta-accent" href="${esc(s.webReserveUrl)}" target="_blank" rel="noopener">🖥 WEBから予約</a>` : ""}
     ${s.lineUrl ? `<a class="cta-btn cta-line" href="${esc(s.lineUrl)}" target="_blank" rel="noopener">💬 LINEで予約</a>` : ""}
   `;
+}
 
-  return `<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${esc(s.clinicName)}</title>
-<style>
+function siteStyles(t){
+  return `
   :root{
     --primary:${t.primary};
     --accent:${t.accent};
@@ -678,7 +826,37 @@ function generateSiteHTML(s){
   footer .phone-big{font-size:32px;font-weight:800;margin-bottom:16px;}
   footer .copyright{margin-top:30px;font-size:12px;opacity:.8;}
   @media(max-width:600px){ .hero h1{font-size:22px;} .hero-badge{font-size:14px;padding:8px 12px;} .price-main{font-size:34px;} }
-</style>
+  .symptom-hero{background:linear-gradient(180deg,var(--bg-soft),#fff);padding:40px 0 30px;text-align:center;}
+  .symptom-hero h1{font-size:28px;margin:0 0 14px;color:#333;}
+  .before-after{font-size:22px;font-weight:800;color:var(--primary);max-width:720px;margin:0 auto;line-height:1.5;}
+  .mission-box{max-width:720px;margin:0 auto;text-align:center;}
+  .mission-catch{font-size:24px;font-weight:800;color:var(--primary);margin-bottom:16px;line-height:1.5;}
+  .mission-intro{font-size:15px;color:#555;white-space:pre-line;}
+  .causes-box, .whyus-box{max-width:720px;margin:0 auto;font-size:15px;color:#444;white-space:pre-line;}
+  .treatment-points{max-width:600px;margin:20px auto 0;list-style:none;padding:0;}
+  .treatment-points li{background:#fff;border-left:5px solid var(--primary);border-radius:4px;padding:10px 16px;margin-bottom:8px;font-size:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+  .faq-list{max-width:720px;margin:0 auto;}
+  .faq-item{background:#fff;border-radius:8px;padding:18px 20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  .faq-q{font-weight:800;color:var(--primary);margin-bottom:8px;font-size:15px;}
+  .faq-a{font-size:14px;color:#444;white-space:pre-line;}
+  .related-list{max-width:640px;margin:0 auto;padding-left:20px;font-size:14px;color:#555;}
+  .related-list li{margin-bottom:8px;}
+  .symptom-testimonial .st-title{font-weight:700;color:var(--primary);margin-bottom:8px;font-size:15px;}
+  .symptom-testimonial .st-body{font-size:14px;color:#444;white-space:pre-line;}
+  `;
+}
+
+function generateSiteHTML(s){
+  const t = s.theme;
+  const reserveBtns = reserveBtnsHTML(s);
+
+  return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${esc(s.clinicName)}</title>
+<style>${siteStyles(t)}</style>
 </head>
 <body>
 
@@ -860,19 +1038,211 @@ ${s.postscript ? `<section>
 </html>`;
 }
 
+function generateSymptomPageHTML(s, p){
+  const t = s.theme;
+  const reserveBtns = reserveBtnsHTML(s);
+
+  return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${esc(p.symptomName)} | ${esc(s.clinicName)}</title>
+<style>${siteStyles(t)}</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div>
+      <div class="tagline">${esc(s.tagline)}</div>
+      <div class="logo">${esc(s.clinicName)}</div>
+    </div>
+    <div class="contact">
+      <div class="phone">📞 ${esc(s.phone)}</div>
+      <div style="font-size:12px;color:#777;">${esc(s.hours)}${s.holiday ? "／" + esc(s.holiday) : ""}</div>
+    </div>
+  </div>
+</header>
+
+<section class="symptom-hero">
+  <div class="wrap">
+    <h1>${esc(p.symptomName)}</h1>
+    ${p.beforeAfterHeadline ? `<div class="before-after">${esc(p.beforeAfterHeadline)}</div>` : ""}
+  </div>
+</section>
+
+<section id="worries">
+  <div class="wrap">
+    <div class="section-title">あなたは今、こんなことで<br>お悩みではありませんか？</div>
+    <div class="worries">
+      ${p.worries.map(w=>`<div class="worry-item">${esc(w)}</div>`).join("")}
+    </div>
+    <div class="worries-cta">${esc(p.worriesCTA)}</div>
+  </div>
+</section>
+
+${p.symptomTestimonials.length ? `<section class="alt">
+  <div class="wrap">
+    <div class="section-title">お客様の声</div>
+    <div class="testimonials">
+      ${p.symptomTestimonials.map(item=>`<div class="testimonial-card symptom-testimonial"><div class="st-title">${esc(item.title)}</div><div class="st-body">${nl2br(item.body)}</div></div>`).join("")}
+    </div>
+  </div>
+</section>` : ""}
+
+<section id="campaign">
+  <div class="wrap">
+    <div class="section-title">キャンペーン</div>
+    <div class="campaign-box">
+      <div class="campaign-label">${esc(s.campaign.label)}</div>
+      ${s.campaign.originalPrice ? `<div class="price-original">通常 ${esc(s.campaign.originalPrice)}</div>` : ""}
+      <div class="price-main">${esc(s.campaign.price)}</div>
+      <div class="price-note">${esc(s.campaign.note)}</div>
+      <div class="price-caution">${esc(s.campaign.caution)}</div>
+    </div>
+    <div class="cta-group">
+      ${reserveBtns}
+    </div>
+    ${s.amenities.length ? `<div class="amenities">
+      ${s.amenities.map(a=>`<div class="amenity-item"><span class="amenity-icon">✓</span>${esc(a)}</div>`).join("")}
+    </div>` : ""}
+  </div>
+</section>
+
+${(p.missionCatch || p.missionIntro) ? `<section class="alt">
+  <div class="wrap">
+    <div class="mission-box">
+      ${p.missionCatch ? `<div class="mission-catch">${esc(p.missionCatch)}</div>` : ""}
+      ${p.missionIntro ? `<div class="mission-intro">${nl2br(p.missionIntro)}</div>` : ""}
+    </div>
+  </div>
+</section>` : ""}
+
+${p.causesBody ? `<section>
+  <div class="wrap">
+    <div class="section-title">${esc(p.causesTitle || "一般的な原因と対処法")}</div>
+    <div class="causes-box">${nl2br(p.causesBody)}</div>
+  </div>
+</section>` : ""}
+
+${p.whyUsBody ? `<section class="alt">
+  <div class="wrap">
+    <div class="section-title">${esc(p.whyUsTitle || "当院だと良くなる理由")}</div>
+    <div class="whyus-box">${nl2br(p.whyUsBody)}</div>
+    ${p.treatmentPoints.length ? `<ul class="treatment-points">${p.treatmentPoints.map(pt=>`<li>${esc(pt)}</li>`).join("")}</ul>` : ""}
+  </div>
+</section>` : ""}
+
+${s.comparisonRows.length ? `<section id="compare">
+  <div class="wrap">
+    <div class="section-title">${esc(s.comparisonTitle)}</div>
+    <table class="compare-table">
+      <thead>
+        <tr><th></th><th>${esc(s.comparisonOtherLabel)}</th><th>${esc(s.comparisonOursLabel)}</th></tr>
+      </thead>
+      <tbody>
+        ${s.comparisonRows.map(r=>`<tr>
+          <th class="compare-row-head">${esc(r.category)}</th>
+          <td class="compare-other">${r.other.split("\n").filter(l=>l.trim()).map(l=>`<div class="compare-line">△ ${esc(l)}</div>`).join("")}</td>
+          <td class="compare-ours">${r.ours.split("\n").filter(l=>l.trim()).map(l=>`<div class="compare-line">◎ ${esc(l)}</div>`).join("")}</td>
+        </tr>`).join("")}
+      </tbody>
+    </table>
+  </div>
+</section>` : ""}
+
+<section id="campaign2" class="alt">
+  <div class="wrap">
+    <div class="campaign-box">
+      <div class="campaign-label">${esc(s.campaign.label)}</div>
+      ${s.campaign.originalPrice ? `<div class="price-original">通常 ${esc(s.campaign.originalPrice)}</div>` : ""}
+      <div class="price-main">${esc(s.campaign.price)}</div>
+      <div class="price-note">${esc(s.campaign.note)}</div>
+      <div class="price-caution">${esc(s.campaign.caution)}</div>
+    </div>
+    <div class="cta-group">
+      ${reserveBtns}
+    </div>
+  </div>
+</section>
+
+${p.faqList.length ? `<section id="faq">
+  <div class="wrap">
+    <div class="section-title">よくある質問</div>
+    <div class="faq-list">
+      ${p.faqList.map(f=>`<div class="faq-item"><div class="faq-q">Q. ${esc(f.q)}</div><div class="faq-a">A. ${nl2br(f.a)}</div></div>`).join("")}
+    </div>
+  </div>
+</section>` : ""}
+
+${p.closingStory ? `<section class="alt">
+  <div class="wrap">
+    <div class="postscript-box">${nl2br(p.closingStory)}</div>
+  </div>
+</section>` : ""}
+
+${p.relatedArticles.length ? `<section>
+  <div class="wrap">
+    <div class="section-title">関連記事</div>
+    <ul class="related-list">
+      ${p.relatedArticles.map(a=>`<li>${esc(a)}</li>`).join("")}
+    </ul>
+  </div>
+</section>` : ""}
+
+<footer>
+  <div class="wrap">
+    <div class="msg">${esc(p.symptomName)}のお悩みは、どうぞ当院にお任せください！</div>
+    <div class="phone-big">📞 ${esc(s.phone)}</div>
+    <div class="cta-group">
+      ${reserveBtns}
+    </div>
+    <div style="font-size:13px;opacity:.9;margin-top:16px;">${esc(s.address)}／${esc(s.hours)}${s.holiday ? "／" + esc(s.holiday) : ""}</div>
+    <div class="copyright">&copy; ${esc(s.copyrightName)}</div>
+  </div>
+</footer>
+
+</body>
+</html>`;
+}
+
+let currentPreviewIndex = -1; // -1 = メインLP, 0以上 = symptomPagesのインデックス
+
+function renderPageSelector(){
+  const sel = document.getElementById("pageSelector");
+  const opts = [`<option value="-1">🏠 メインLP</option>`]
+    .concat(state.symptomPages.map((p,i)=>`<option value="${i}">🩹 ${esc(p.symptomName || "（無題）")}</option>`));
+  sel.innerHTML = opts.join("");
+  if(currentPreviewIndex >= state.symptomPages.length) currentPreviewIndex = -1;
+  sel.value = String(currentPreviewIndex);
+}
+
 function renderPreview(){
-  const html = generateSiteHTML(state);
+  renderPageSelector();
+  const html = currentPreviewIndex === -1
+    ? generateSiteHTML(state)
+    : generateSymptomPageHTML(state, state.symptomPages[currentPreviewIndex]);
   document.getElementById("preview").srcdoc = html;
 }
 
+document.getElementById("pageSelector").addEventListener("change", (e)=>{
+  currentPreviewIndex = Number(e.target.value);
+  renderPreview();
+});
+
 // ---------- toolbar actions ----------
 document.getElementById("downloadBtn").addEventListener("click", ()=>{
-  const html = generateSiteHTML(state);
+  const isMain = currentPreviewIndex === -1;
+  const html = isMain ? generateSiteHTML(state) : generateSymptomPageHTML(state, state.symptomPages[currentPreviewIndex]);
   const blob = new Blob([html], {type:"text/html"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = (state.clinicName || "landing-page") + ".html";
+  const name = isMain
+    ? (state.clinicName || "landing-page")
+    : `${state.clinicName || "lp"}-${state.symptomPages[currentPreviewIndex].symptomName || "symptom"}`;
+  a.download = name + ".html";
   a.click();
   URL.revokeObjectURL(url);
 });
@@ -922,6 +1292,7 @@ function fullRebuild(){
   renderProgramChartList();
   renderConditionsList();
   renderRecommendationsList();
+  renderSymptomPagesList();
   if(state.heroImage){
     document.getElementById("heroThumb").src = state.heroImage;
     document.getElementById("heroThumb").style.display = "block";
