@@ -38,6 +38,10 @@
   .add-btn{align-self:flex-start;background:#eee;border:1px solid var(--app-border);border-radius:4px;padding:5px 10px;font-size:12px;cursor:pointer;}
   .add-btn:hover{background:#e2e2e2;}
   .hint{font-size:11px;color:#888;line-height:1.5;}
+  .editor-tabs{display:flex;gap:6px;margin-bottom:10px;}
+  .tab-btn{flex:1;padding:10px 6px;border:1px solid var(--app-border);border-radius:6px;background:#eee;font-size:13px;font-weight:700;cursor:pointer;color:#666;}
+  .tab-btn.active{background:var(--app-primary);color:#fff;border-color:var(--app-primary);}
+  .tab-btn:hover{opacity:.9;}
   .thumb{max-width:100%;max-height:80px;border-radius:4px;margin-top:4px;display:block;}
   #jsonFileInput, #imgFileInput{display:none;}
 </style>
@@ -45,6 +49,13 @@
 <body>
 <div class="app">
   <aside class="editor" id="editor">
+    <div class="editor-tabs">
+      <button type="button" class="tab-btn active" data-tab="main">🏠 メインLP</button>
+      <button type="button" class="tab-btn" data-tab="symptom">🩹 症状別ページ</button>
+    </div>
+    <p class="hint">共通設定（デザイン・基本情報・キャンペーン・他院との違い）は、メインLPと症状別ページの両方で使われます。</p>
+
+    <!-- 共通設定 -->
     <!-- 1. デザイン -->
     <details open>
       <summary>🎨 デザイン設定</summary>
@@ -84,47 +95,6 @@
       </div>
     </details>
 
-    <!-- 3. ヒーロー -->
-    <details>
-      <summary>🖼️ ヒーローエリア</summary>
-      <div class="section-body">
-        <div id="heroBadgesList"></div>
-        <button class="add-btn" data-action="add-simple" data-path="heroBadges">＋ 症状バッジを追加</button>
-        <div class="field"><label>見出し（大）</label><input type="text" data-path="heroHeadline"></div>
-        <div class="field"><label>見出し（小）</label><input type="text" data-path="heroSubheadline"></div>
-        <div class="row2">
-          <div class="field"><label>実績数字</label><input type="text" data-path="trustNumber"></div>
-          <div class="field"><label>実績ラベル</label><input type="text" data-path="trustLabel"></div>
-        </div>
-        <div class="field">
-          <label>ヒーロー画像</label>
-          <label class="btn add-btn" for="imgFileInput" style="display:inline-block;">画像を選択</label>
-          <input type="file" id="imgFileInput" accept="image/*">
-          <img id="heroThumb" class="thumb" style="display:none;">
-        </div>
-      </div>
-    </details>
-
-    <!-- 4. お悩みリスト -->
-    <details>
-      <summary>😣 お悩みリスト</summary>
-      <div class="section-body">
-        <div id="worriesList"></div>
-        <button class="add-btn" data-action="add-simple" data-path="worries">＋ お悩みを追加</button>
-        <div class="field"><label>お悩みCTA文</label><input type="text" data-path="worriesCTA"></div>
-      </div>
-    </details>
-
-    <!-- 5. 選ばれる理由 -->
-    <details>
-      <summary>✅ 選ばれる理由</summary>
-      <div class="section-body">
-        <div class="field"><label>セクション見出し</label><input type="text" data-path="featuresTitle"></div>
-        <div id="featuresList"></div>
-        <button class="add-btn" data-action="add-object" data-path="features">＋ 理由を追加</button>
-      </div>
-    </details>
-
     <!-- 5b. 他院との違い -->
     <details>
       <summary>🆚 他院との違い</summary>
@@ -137,18 +107,6 @@
         <div id="comparisonRowsList"></div>
         <button class="add-btn" data-action="add-comparison" data-path="comparisonRows">＋ 比較項目を追加</button>
         <p class="hint">他院・当院の欄は改行区切りで複数項目を入力できます。</p>
-      </div>
-    </details>
-
-    <!-- 5c. 対応できる症状 -->
-    <details>
-      <summary>🩺 対応できる症状</summary>
-      <div class="section-body">
-        <div class="field"><label>セクション見出し</label><input type="text" data-path="conditionsTitle"></div>
-        <div class="field"><label>サブ見出し</label><input type="text" data-path="conditionsSubtitle"></div>
-        <div id="conditionsList"></div>
-        <button class="add-btn" data-action="add-condition" data-path="conditions">＋ カテゴリを追加</button>
-        <p class="hint">症状は改行区切りで複数入力できます。</p>
       </div>
     </details>
 
@@ -168,56 +126,115 @@
       </div>
     </details>
 
-    <!-- 6b. 通院プログラム -->
-    <details>
-      <summary>📅 通院プログラム</summary>
-      <div class="section-body">
-        <div class="field"><label>見出し（改行可）</label><textarea data-path="program.title"></textarea></div>
-        <div class="field"><label>本文（改行可）</label><textarea data-path="program.body" style="min-height:100px;"></textarea></div>
-        <div class="field"><label>グラフ見出し</label><input type="text" data-path="program.chartTitle"></div>
-        <div id="programChartList"></div>
-        <button class="add-btn" data-action="add-chart" data-path="program.chartData">＋ 項目を追加</button>
-      </div>
-    </details>
+    <!-- メインLP専用 -->
+    <div id="mainLpGroup">
+      <!-- 3. ヒーロー -->
+      <details>
+        <summary>🖼️ ヒーローエリア</summary>
+        <div class="section-body">
+          <div id="heroBadgesList"></div>
+          <button class="add-btn" data-action="add-simple" data-path="heroBadges">＋ 症状バッジを追加</button>
+          <div class="field"><label>見出し（大）</label><input type="text" data-path="heroHeadline"></div>
+          <div class="field"><label>見出し（小）</label><input type="text" data-path="heroSubheadline"></div>
+          <div class="row2">
+            <div class="field"><label>実績数字</label><input type="text" data-path="trustNumber"></div>
+            <div class="field"><label>実績ラベル</label><input type="text" data-path="trustLabel"></div>
+          </div>
+          <div class="field">
+            <label>ヒーロー画像</label>
+            <label class="btn add-btn" for="imgFileInput" style="display:inline-block;">画像を選択</label>
+            <input type="file" id="imgFileInput" accept="image/*">
+            <img id="heroThumb" class="thumb" style="display:none;">
+          </div>
+        </div>
+      </details>
 
-    <!-- 6c. 推薦の声 -->
-    <details>
-      <summary>🌟 推薦の声</summary>
-      <div class="section-body">
-        <div class="field"><label>セクション見出し</label><input type="text" data-path="recommendationsTitle"></div>
-        <div id="recommendationsList"></div>
-        <button class="add-btn" data-action="add-recommendation" data-path="recommendations">＋ 推薦の声を追加</button>
-      </div>
-    </details>
+      <!-- 4. お悩みリスト -->
+      <details>
+        <summary>😣 お悩みリスト</summary>
+        <div class="section-body">
+          <div id="worriesList"></div>
+          <button class="add-btn" data-action="add-simple" data-path="worries">＋ お悩みを追加</button>
+          <div class="field"><label>お悩みCTA文</label><input type="text" data-path="worriesCTA"></div>
+        </div>
+      </details>
 
-    <!-- 7. お客様の声 -->
-    <details>
-      <summary>💬 お客様の声</summary>
-      <div class="section-body">
-        <div id="testimonialsList"></div>
-        <button class="add-btn" data-action="add-testimonial" data-path="testimonials">＋ 声を追加</button>
-      </div>
-    </details>
+      <!-- 5. 選ばれる理由 -->
+      <details>
+        <summary>✅ 選ばれる理由</summary>
+        <div class="section-body">
+          <div class="field"><label>セクション見出し</label><input type="text" data-path="featuresTitle"></div>
+          <div id="featuresList"></div>
+          <button class="add-btn" data-action="add-object" data-path="features">＋ 理由を追加</button>
+        </div>
+      </details>
 
-    <!-- 9. 症状別ページ -->
-    <details>
-      <summary>🩹 症状別ページ</summary>
-      <div class="section-body">
-        <p class="hint">「ぎっくり腰」「肩こり」など症状ごとに専用ページを作れます。上のツールバーの表示切替から確認・書き出しができます。キャンペーンと他院との違いは全ページ共通です。</p>
-        <div id="symptomPagesList"></div>
-        <button class="add-btn" data-action="add-symptom-page">＋ 症状別ページを追加</button>
-      </div>
-    </details>
+      <!-- 5c. 対応できる症状 -->
+      <details>
+        <summary>🩺 対応できる症状</summary>
+        <div class="section-body">
+          <div class="field"><label>セクション見出し</label><input type="text" data-path="conditionsTitle"></div>
+          <div class="field"><label>サブ見出し</label><input type="text" data-path="conditionsSubtitle"></div>
+          <div id="conditionsList"></div>
+          <button class="add-btn" data-action="add-condition" data-path="conditions">＋ カテゴリを追加</button>
+          <p class="hint">症状は改行区切りで複数入力できます。</p>
+        </div>
+      </details>
 
-    <!-- 8. フッター -->
-    <details>
-      <summary>📍 アクセス・フッター</summary>
-      <div class="section-body">
-        <div class="field"><label>フッターメッセージ</label><textarea data-path="footerMessage"></textarea></div>
-        <div class="field"><label>追伸</label><textarea data-path="postscript" style="min-height:80px;"></textarea></div>
-        <div class="field"><label>コピーライト表記</label><input type="text" data-path="copyrightName"></div>
-      </div>
-    </details>
+      <!-- 6b. 通院プログラム -->
+      <details>
+        <summary>📅 通院プログラム</summary>
+        <div class="section-body">
+          <div class="field"><label>見出し（改行可）</label><textarea data-path="program.title"></textarea></div>
+          <div class="field"><label>本文（改行可）</label><textarea data-path="program.body" style="min-height:100px;"></textarea></div>
+          <div class="field"><label>グラフ見出し</label><input type="text" data-path="program.chartTitle"></div>
+          <div id="programChartList"></div>
+          <button class="add-btn" data-action="add-chart" data-path="program.chartData">＋ 項目を追加</button>
+        </div>
+      </details>
+
+      <!-- 6c. 推薦の声 -->
+      <details>
+        <summary>🌟 推薦の声</summary>
+        <div class="section-body">
+          <div class="field"><label>セクション見出し</label><input type="text" data-path="recommendationsTitle"></div>
+          <div id="recommendationsList"></div>
+          <button class="add-btn" data-action="add-recommendation" data-path="recommendations">＋ 推薦の声を追加</button>
+        </div>
+      </details>
+
+      <!-- 7. お客様の声 -->
+      <details>
+        <summary>💬 お客様の声</summary>
+        <div class="section-body">
+          <div id="testimonialsList"></div>
+          <button class="add-btn" data-action="add-testimonial" data-path="testimonials">＋ 声を追加</button>
+        </div>
+      </details>
+
+      <!-- 8. フッター -->
+      <details>
+        <summary>📍 アクセス・フッター</summary>
+        <div class="section-body">
+          <div class="field"><label>フッターメッセージ</label><textarea data-path="footerMessage"></textarea></div>
+          <div class="field"><label>追伸</label><textarea data-path="postscript" style="min-height:80px;"></textarea></div>
+          <div class="field"><label>コピーライト表記</label><input type="text" data-path="copyrightName"></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- 症状別ページ専用 -->
+    <div id="symptomGroup" style="display:none;">
+      <details open>
+        <summary>🩹 症状別ページ一覧</summary>
+        <div class="section-body">
+          <p class="hint">「ぎっくり腰」「肩こり」など症状ごとに専用ページを作れます。上のツールバーの表示切替からプレビュー・書き出しができます。</p>
+          <div id="symptomPagesList"></div>
+          <button class="add-btn" data-action="add-symptom-page">＋ 症状別ページを追加</button>
+        </div>
+      </details>
+    </div>
+
     <p class="hint">編集内容はブラウザに自動保存されます。「HTMLをダウンロード」で公開用の1ファイルを書き出せます。</p>
   </aside>
 
@@ -658,8 +675,9 @@ editor.addEventListener("click", (e)=>{
       closingStory:"",
       relatedArticles:[]
     });
+    currentPreviewIndex = state.symptomPages.length - 1;
+    setEditorTab("symptom");
     renderSymptomPagesList();
-    renderPageSelector();
   } else if(action === "remove-symptom-page"){
     const idx = Number(e.target.dataset.index);
     state.symptomPages.splice(idx, 1);
@@ -1228,7 +1246,27 @@ function renderPreview(){
 
 document.getElementById("pageSelector").addEventListener("change", (e)=>{
   currentPreviewIndex = Number(e.target.value);
+  setEditorTab(currentPreviewIndex === -1 ? "main" : "symptom");
   renderPreview();
+});
+
+// ---------- editor tabs (メインLP / 症状別ページ を分離) ----------
+function setEditorTab(tab){
+  document.querySelectorAll(".tab-btn").forEach(b=> b.classList.toggle("active", b.dataset.tab === tab));
+  document.getElementById("mainLpGroup").style.display = tab === "main" ? "" : "none";
+  document.getElementById("symptomGroup").style.display = tab === "symptom" ? "" : "none";
+}
+document.querySelectorAll(".tab-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const tab = btn.dataset.tab;
+    setEditorTab(tab);
+    if(tab === "symptom"){
+      if(currentPreviewIndex === -1 && state.symptomPages.length) currentPreviewIndex = 0;
+    } else {
+      currentPreviewIndex = -1;
+    }
+    renderPreview();
+  });
 });
 
 // ---------- toolbar actions ----------
