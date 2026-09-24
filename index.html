@@ -34,6 +34,8 @@
   .color-field{display:flex;align-items:center;gap:8px;}
   .color-field input[type=color]{width:36px;height:28px;border:none;padding:0;background:none;cursor:pointer;}
   .list-item{border:1px dashed var(--app-border);border-radius:5px;padding:8px;margin-bottom:6px;position:relative;background:#fafaf7;}
+  .list-item.active-symptom-card{border:1px solid var(--app-primary);background:#f4f8ef;}
+  .preview-badge{display:inline-block;background:var(--app-primary);color:#fff;font-size:11px;font-weight:700;padding:4px 9px;border-radius:4px;margin-bottom:8px;}
   .list-item .del{position:absolute;top:4px;right:4px;background:#c0392b;color:#fff;border:none;border-radius:3px;font-size:10px;padding:2px 6px;cursor:pointer;}
   .add-btn{align-self:flex-start;background:#eee;border:1px solid var(--app-border);border-radius:4px;padding:5px 10px;font-size:12px;cursor:pointer;}
   .add-btn:hover{background:#e2e2e2;}
@@ -584,9 +586,13 @@ function renderSymptomPagesList(){
   const container = document.getElementById("symptomPagesList");
   container.innerHTML = state.symptomPages.map((p,i)=>{
     const base = `symptomPages.${i}`;
+    const isActive = i === currentPreviewIndex;
     return `
-    <div class="list-item">
+    <div class="list-item${isActive ? " active-symptom-card" : ""}">
       <button class="del" data-action="remove-symptom-page" data-index="${i}">削除</button>
+      ${isActive
+        ? `<span class="preview-badge">👁 プレビュー中</span>`
+        : `<button class="add-btn" data-action="preview-symptom-page" data-index="${i}">👁 このページをプレビュー</button>`}
       <div class="field"><label>症状名（ページタイトル）</label><input type="text" value="${escapeAttr(p.symptomName)}" data-obj-path="symptomPages" data-index="${i}" data-key="symptomName"></div>
 
       <p class="hint">😣 お悩みリスト</p>
@@ -681,10 +687,12 @@ editor.addEventListener("click", (e)=>{
   } else if(action === "remove-symptom-page"){
     const idx = Number(e.target.dataset.index);
     state.symptomPages.splice(idx, 1);
-    if(currentPreviewIndex === idx) currentPreviewIndex = -1;
+    if(currentPreviewIndex === idx) currentPreviewIndex = state.symptomPages.length ? 0 : -1;
     else if(currentPreviewIndex > idx) currentPreviewIndex -= 1;
     renderSymptomPagesList();
-    renderPageSelector();
+  } else if(action === "preview-symptom-page"){
+    currentPreviewIndex = Number(e.target.dataset.index);
+    renderSymptomPagesList();
   } else if(action === "remove-object"){
     getPath(state, path).splice(Number(e.target.dataset.index), 1);
     rerenderListSection(path);
@@ -1229,11 +1237,9 @@ let currentPreviewIndex = -1; // -1 = メインLP, 0以上 = symptomPagesのイ�
 
 function renderPageSelector(){
   const sel = document.getElementById("pageSelector");
-  const opts = [`<option value="-1">🏠 メインLP</option>`]
-    .concat(state.symptomPages.map((p,i)=>`<option value="${i}">🩹 ${esc(p.symptomName || "（無題）")}</option>`));
-  sel.innerHTML = opts.join("");
-  if(currentPreviewIndex >= state.symptomPages.length) currentPreviewIndex = -1;
-  sel.value = String(currentPreviewIndex);
+  sel.innerHTML = `<option value="main">🏠 メイン</option><option value="symptom">🩹 症状別</option>`;
+  if(currentPreviewIndex >= state.symptomPages.length) currentPreviewIndex = state.symptomPages.length ? 0 : -1;
+  sel.value = currentPreviewIndex === -1 ? "main" : "symptom";
 }
 
 function renderPreview(){
@@ -1245,8 +1251,13 @@ function renderPreview(){
 }
 
 document.getElementById("pageSelector").addEventListener("change", (e)=>{
-  currentPreviewIndex = Number(e.target.value);
-  setEditorTab(currentPreviewIndex === -1 ? "main" : "symptom");
+  if(e.target.value === "main"){
+    currentPreviewIndex = -1;
+  } else {
+    if(currentPreviewIndex === -1) currentPreviewIndex = state.symptomPages.length ? 0 : -1;
+  }
+  setEditorTab(e.target.value);
+  renderSymptomPagesList();
   renderPreview();
 });
 
@@ -1265,6 +1276,7 @@ document.querySelectorAll(".tab-btn").forEach(btn=>{
     } else {
       currentPreviewIndex = -1;
     }
+    renderSymptomPagesList();
     renderPreview();
   });
 });
